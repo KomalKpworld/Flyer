@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sub_flyer1s",
+  "info": {
+    "singularName": "sub-flyer1",
+    "pluralName": "sub-flyer1s",
+    "displayName": "subFlyer1"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "type": {
+      "type": "integer"
+    },
+    "rotation": {
+      "type": "integer"
+    },
+    "scale": {
+      "type": "integer"
+    },
+    "is_flipped": {
+      "type": "boolean"
+    },
+    "is_lock": {
+      "type": "integer"
+    },
+    "x": {
+      "type": "decimal"
+    },
+    "y": {
+      "type": "decimal"
+    },
+    "height": {
+      "type": "string"
+    },
+    "width": {
+      "type": "string"
+    },
+    "order_by": {
+      "type": "integer"
+    },
+    "font": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::font.font"
+    },
+    "font_vertical_spacing": {
+      "type": "integer"
+    },
+    "text": {
+      "type": "string"
+    },
+    "image_url": {
+      "type": "string"
+    }
+  }
+}

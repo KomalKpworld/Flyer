@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "flyers",
+  "info": {
+    "singularName": "flyer",
+    "pluralName": "flyers",
+    "displayName": "flyer"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "image_url": {
+      "type": "string"
+    },
+    "background_image_url": {
+      "type": "string"
+    },
+    "poster_height": {
+      "type": "string"
+    },
+    "poster_width": {
+      "type": "string"
+    },
+    "color": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "integer"
+    },
+    "is_pro": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "fonts",
+  "info": {
+    "singularName": "font",
+    "pluralName": "fonts",
+    "displayName": "font"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "font_name": {
+      "type": "string"
+    },
+    "font_size": {
+      "type": "decimal"
+    },
+    "font_color": {
+      "type": "string"
+    },
+    "font_align": {
+      "type": "string"
+    },
+    "is_bold": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_underline": {
+      "type": "boolean",
+      "default": false
+    },
+    "letter_spacing": {
+      "type": "decimal"
+    },
+    "font_file": {
+      "type": "string"
+    },
+    "file_font": {
+      "type": "string"
+    }
+  }
+}
