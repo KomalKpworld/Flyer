@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Schema.Types.ObjectId
 
 const flyerSchema = new mongoose.Schema({
+  flyerId: {
+  type: ObjectId,
+  required: true,
+  ref: "flyers"
+  },
   type: {
     type: Number,
     enum: [1,2],
@@ -57,16 +63,16 @@ const flyerSchema = new mongoose.Schema({
     },
     is_bold: {
       type: Boolean,
-      default: false
+ 
     },
     is_underline: {
       type: Boolean,
-      default: false
+  
     },
 
     letter_spacing: {
       type: Number,
-      default: 0
+  
     },
     font_file: {
       tyep: String

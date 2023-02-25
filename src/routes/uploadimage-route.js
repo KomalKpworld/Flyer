@@ -1,6 +1,9 @@
 const express = require("express");
 const uploadController = require('../controller/uploadimage')
 const uploadRouter = express.Router();
-uploadRouter.post('/upload-image', uploadController.upload)
+uploadRouter.post('/upload-flyer-parent-image', uploadController.uploadParentImage)
+uploadRouter.post('/upload-subflyer-image', uploadController.uploadSubflyerImage)
+uploadRouter.post('/upload-background-image', uploadController.uploadBackgroundImage)
+uploadRouter.post('/upload-font', uploadController.uploadFont)
 
 module.exports = uploadRouter

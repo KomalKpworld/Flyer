@@ -32,4 +32,4 @@ const flyerSchema = new mongoose.Schema({
 }, { timestamps: true }
 )
 
-module.exports = mongoose.model("flyer ", flyerSchema)
+module.exports = mongoose.model("flyers", flyerSchema)

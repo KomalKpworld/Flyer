@@ -1,49 +1,57 @@
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
-    cloud_name: "ddhyuse8r",
-    api_key: "455414113895392",
-    api_secret: "7kNNkfb8SJz-Pr4Jwl8xSbEYVX0"
-  });
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret
+});
 
-  const upload = async (file)=> {
-    return new Promise(function (resolve, reject) {
-    file = req?.files
-    console.log("kom")
-    cloudinary.uploader.upload(file.tempFilePath, async (err, result) => {
-        console.log(result)
+const uploadParentImage = async (file) => {
+  return new Promise(function (resolve, reject) {
+    cloudinary.uploader.upload(
+      file.tempFilePath, { folder: "uploads/parentFlyer/thumbnails" },
+      async (error, result) => {
+        console.log(error, result.url);
         return resolve(result.url)
-    
-      })
-  
-  }
-    )}
+      }
+    );
+  })
+}
+//cloudinary.uploader.destroy('zombie', function(result) { console.log(result) });
 
+const uploadBackgroundImage = async (file) => {
+  return new Promise(function (resolve, reject) {
+    cloudinary.uploader.upload(
+      file.tempFilePath, { folder: "uploads/background/thumbnails" },
+      async (error, result) => {
+        console.log(error, result.url);
+        return resolve(result.url)
+      }
+    );
+  })
+}
 
-// let uploadFile = async (file) => {
-//     return new Promise(function (resolve, reject) {
-
-//         let s3 = new aws.S3({ apiVersion: "2006-03-01" })
-
-//         var uploadParams = {
-//             ACL: "public-read",
-//             Bucket: "classroom-training-bucket",
-//             Key: "group10/" + file.originalname,
-//             Body: file.buffer
-//         }
-//         console.log(uploadFile)
-//         s3.upload(uploadParams, function (err, data) {
-//             if (err) {
-//                 return reject({ "error": err })
-//             }
-
-//             return resolve(data.Location)
-//         }
-//         )
-
-//     }
-//     )
-// }
-
-module.exports = { upload}
+const uploadSubflyerImage = async (file) => {
+  return new Promise(function (resolve, reject) {
+    cloudinary.uploader.upload(
+      file.tempFilePath, { folder: "uploads/flyer/thumbnails" },
+      async (error, result) => {
+        console.log(error, result.url);
+        return resolve(result.url)
+      }
+    );
+  })
+}
+const uploadFont= async (file) => {
+  return new Promise(function (resolve, reject) {
+    cloudinary.uploader.upload(
+      file.tempFilePath, { folder: "uploads/font" },
+      async (error, result) => {
+        console.log(error, result.url);
+        return resolve(result.url)
+      }
+    );
+  })
+}
+module.exports = { uploadBackgroundImage ,uploadSubflyerImage ,uploadParentImage, uploadFont}
 

@@ -22,9 +22,10 @@ mongoose.connect(process.env.db, { useNewUrlParser: true })
     .catch(err => console.log(err))
 
 
-// mongoose.set("debug", (collectionName, method, query, doc) => {
-//         console.log(`${collectionName}.${method}`, JSON.stringify(query), doc);
-//         });
+mongoose.set("debug", (collectionName, method, query, doc) => {
+    
+        console.log(`${collectionName}.${method}`, JSON.stringify(query), doc);
+        });
         
 
     app.use('/', flyerRoute );
