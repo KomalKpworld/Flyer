@@ -4,8 +4,11 @@ const createFlyer = async (req, res) => {
 
   try {
     let flyerBody = req.body
+    
     const { image_url, background_image_url, poster_height, poster_width, color, mode, is_pro } = flyerBody
-
+if(!flyerBody){
+  return res.status(400).send({message: "please enter data"})
+}
     let createData = await flyerModel.create(flyerBody)
     return res.status(201).send({ status: true, message: " flyer created successfully", data: createData })
   } catch (error) {
