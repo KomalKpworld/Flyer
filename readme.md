@@ -1,2 +1,2 @@
 //Set heroku config
-heroku config:set 
+heroku config:Set 

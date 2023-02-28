@@ -6,28 +6,38 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 const Flyerpage = () => {
-  const [postData, setPost] = useState([]);
-  const [error, setError] = useState('')
-const navigate= useNavigate();
- const LoadDetails=(id)=>{
-  navigate('/flyer/details/'+id);
- }
+  const [postData, SetPost] = useState([]);
+  const [error, SetError] = useState('')
+  const navigate = useNavigate();
+  const LoadDetails = (id) => {
+    navigate('/flyer/details/' + id);
+  }
 
- const LoadEdit=(id)=>{
-  navigate('/flyer/edit/'+id);
- }
+  const LoadEdit = (id) => {
+    localStorage.setItem('id', id)
+    navigate('/flyer/edit/' + id);
+  }
 
- const LoadRemove=(id)=>{
-  navigate('/flyer/delete/'+id);
- }
+  const LoadRemove = async (id) => {
+  axios.delete(`http://localhost:3001/delete-flyer/${id}`);
+
+  const newList = postData?.data?.filter((data)=>{
+    console.log(data._id)
+   return data._id !== id;
+  })
+
+ SetPost(newList);
+
+   
+  }
 
 
   useEffect(() => {
     axios.get('http://localhost:3001/get-flyer-list').then((response) => {
-      setPost(response.data);
+      SetPost(response.data);
 
     }).catch((error) => {
-      return setError(error.message)
+      return SetError(error.message)
     })
 
   }, []);
@@ -36,91 +46,100 @@ const navigate= useNavigate();
 
   return (
 
-    <>
-      <Link to="flyer/create"> Add New (+)</Link>
-      <div style={{ margin: '10px' }}>
+    <div style={{ marginTop: '60px', textAlign: 'center' }} className='text-sm'>
 
-        <Table striped boarderd='true' size="sm">
+      <Link to="flyer/create" className='top-36 bottom-36' style={{ marginTop: '30px', marginBottom: '30px' }} > Add New (+)</Link>
 
-          <thead className='bg-dark text-white'>
-            <tr>
-              <th>
-                _id
-              </th>
-              <th>
-                image_url
-              </th>
-              <th>
-                background_image_url
-              </th>
-              <th>
-                poster_height
-              </th>
-              <th>
-                poster_width
-              </th>
-              <th>
-                color
-              </th>
-              <th>
-                mode
-              </th>
-              <th>
-                is_pro
-              </th>
-              <th>
-                Actions
-              </th>
 
-            </tr>
-          </thead>
+      <Table className='border-collapse border border-slate-400 ...' style={{ marginLeft: '10px', marginRight: '50px', marginTop: '10px' }}>
 
-          <tbody >
-            {
-              postData?.data && postData?.data?.length > 0 ?
-                postData?.data?.map((data) => {
-                  return (
-                    <tr key={data?._id}>
-                      <td>
-                        {data?._id}
-                      </td>
-                      <td>
-                        {data?.background_image_url}
-                      </td>
-                      <td>
-                        {data?.image_url}
-                      </td>
-                      <td>
-                        {data?.color}
-                      </td>
-                      <td>
-                        {data?.poster_height}
-                      </td>
-                      <td>
-                        {data?.poster_width}
-                      </td>
-                      <td>
-                        {data?.mode}
-                      </td>
-                      <td >
-                        {data.is_pro}
-                      </td>
-                      <td><a onClick={() => { LoadEdit(data?._id) }} className='btn btn-success' >
-                        <Link to='/flyer/edit/:flyerId'>Edit </Link></a>
-                        <a onClick={() => { LoadRemove(data?._id) }} className='btn btn-success'>Remove</a>
-                        <a onClick={() => { LoadDetails(data?._id) }} lassName='btn btn-success'>Details</a>
-                      </td>
+        <thead >
+          <tr>
+            <th className='border border-slate-400 ...'>
+              _id
+            </th>
+            <th className='border border-slate-400 ...'>
+              image_url
+            </th>
+            <th className='border border-slate-400 ...'>
+              background_image_url
+            </th>
+            <th className='border border-slate-400  ...'>
+              poster_height
+            </th>
+            <th className='border border-slate-400  ...'>
+              poster_width
+            </th>
+            <th className='border border-slate-400 ...'>
+              color
+            </th>
+            <th className='border border-slate-400  ...'>
+              mode
+            </th>
+            <th className='border border-slate-400 ...'>
+              is_pro
+            </th>
+            <th className='border border-slate-300 ...'>
+              Actions
+            </th>
 
-                    </tr>
-                  )
-                }) : " No Data Available"
-            }
-          </tbody>
-        </Table>
+          </tr>
+        </thead>
 
-      </div>
+        <tbody >
+          {
+            postData?.data && postData?.data?.length > 0 ?
+              postData?.data?.map((data) => {
+                return (
+                  <tr key={data?._id}>
+                    <td className='border border-slate-400 ...'>
+                      {data?._id}
+                    </td>
+                    <td className='border border-slate-400 ...'>
+                      {data?.image_url}
+                    </td>
+                    <td className='border border-slate-400 ...'>
+                      {data?.background_image_url}
+                    </td>
+                    <td className='border border-slate-400 ...'>
+                      {data?.poster_height}
+                    </td>
+                    <td className='border border-slate-400 ...'>
+                      {data?.poster_width}
+                    </td>
+                    <td className='border border-slate-400 ...'>
+                      {data?.color}
+                    </td>
+                    <td className='border border-slate-400 ...'>
+                      {data?.mode}
+                    </td>
+                    <td className='border border-slate-400 ...'>
+                      {data.is_pro}
+                    </td>
+                    <td className='border border-slate-400 ...'>
+                      <a onClick={() => { LoadEdit(data?._id) }} className='btn btn-success' >
+                        <Link to='/flyer/edit/:flyerId'>Edit </Link></a> <br />
 
-    </>
+                      <a onClick={() => { LoadRemove(data?._id) }} className='btn btn-success'>
+                        <Link> Remove</Link></a><br />
+
+
+                      <a onClick={() => { LoadDetails(data?._id) }} lassName='btn btn-success'>
+                        <Link> Details </Link></a>
+
+
+                    </td>
+
+                  </tr>
+                )
+              }) : " No Data Available"
+          }
+        </tbody>
+      </Table>
+
+    </div>
+
+    
   )
 }
 
