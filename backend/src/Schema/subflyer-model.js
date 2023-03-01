@@ -9,7 +9,7 @@ const flyerSchema = new mongoose.Schema({
   },
   type: {
     type: Number,
-    enum: [1,2],
+    default: 1
   },
   rotation: {
     type: Number,

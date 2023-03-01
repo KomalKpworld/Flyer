@@ -76,9 +76,10 @@ import { Link } from 'react-router-dom';
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
+            <Typography variant="h6" noWrap component="div" >
              Fleyer List
             </Typography>
+
           </Toolbar>
         </AppBar>
         <Drawer

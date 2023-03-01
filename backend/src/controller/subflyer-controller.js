@@ -7,12 +7,27 @@ const createSubFlyer = async (req, res) => {
 
   try {
     let flyerBody = req.body
-    const { type, rotation, scale, is_flipped, is_lock, x, y, height, width, order_by, font, font_vertical_spacing, text, flyerId,image_url } = flyerBody
-    if ((image_url && type !== 2)) {
-      return res.status(400).send({ status: false, message: " type should be 2 if you choose image", data: null })
-    }
-    else if ((font && type !== 1)) {
-      return res.status(400).send({ status: false, message: "the type should be 1 if you choose font ", data: null })
+    const { type, rotation, scale, is_flipped, is_lock, x, y, height, width, order_by, font, font_vertical_spacing, text, flyerId, image_url } = flyerBody
+    if ((!font)) {
+
+      let obj = {
+        type: '2',
+        rotation,
+        scale,
+        is_flipped,
+        is_lock,
+        x,
+        y,
+        height,
+        width,
+        order_by,
+        font_vertical_spacing,
+        text,
+        flyerId,
+        image_url
+      }
+      let createData = await subflyerModel.create(obj)
+      return res.status(201).send({ status: true, message: "subflyer created successfully", data: createData })
     }
     else {
       let createData = await subflyerModel.create(flyerBody)
@@ -41,13 +56,30 @@ const updateSubFlyer = async function (req, res) {
   }
 }
 
-//* get  SubFlyer by id   *///////////////////////////////////
-const getSubFlyer = async function (req, res) {
+//* get   getSubFlyerByFlyer  by Flyer id   *///////////////////////////////////
+const  getSubFlyerByFlyer = async function (req, res) {
   try {
     let id = req.params.flyerId
-    console.log(id)
-  let flyerData= await subflyerModel.find({flyerId:id})
 
+    let flyerData = await subflyerModel.find({ flyerId: id })
+
+    if (!flyerData) {
+      return res.status(400).send({ status: false, message: "please check id , record is deleted or wrong id", data: null })
+    }
+    return res.status(200).send({ status: true, message: "get subflyer by id", data: flyerData })
+  }
+  catch (err) {
+    res.status(500).send({ status: false, message: err.message })
+  }
+}
+
+
+const getSubFlyerById = async function (req, res) {
+  try {
+    let id = req.params.id
+    console.log(id)
+    let flyerData = await subflyerModel.findOne({_id:id})
+console.log(flyerData)
     if (!flyerData) {
       return res.status(400).send({ status: false, message: "please check id , record is deleted or wrong id", data: null })
     }
@@ -61,21 +93,21 @@ const getSubFlyer = async function (req, res) {
 //* get  SubFlyer    *///////////////////////////////////
 const getSubFlyerList = async function (req, res) {
   try {
-    
-    let flyerData = await flyers.aggregate([
-      {
-        $lookup: {
-          from: "subflyers",
-          localField: "_id",
-          foreignField: "flyerId",
-          as: "subflyer",
-        },
-         
-      },
-    ])
-   
-    //let getFlyerById = await subflyerModel.find()
-    return res.status(200).send({ status: true, message: "get subflyer list  ", data: flyerData  })
+
+    // let flyerData = await flyers.aggregate([
+    //   {
+    //     $lookup: {
+    //       from: "subflyers",
+    //       localField: "_id",
+    //       foreignField: "flyerId",
+    //       as: "subflyer",
+    //     },
+
+    //   },
+    // ])
+
+    let getFlyerById = await subflyerModel.find()
+    return res.status(200).send({ status: true, message: "get subflyer list  ", data: getFlyerById })
   }
   catch (err) {
     res.status(500).send({ status: false, message: err.message })
@@ -88,7 +120,7 @@ const deleteSubFlyer = async function (req, res) {
   try {
     let id = req.params.id
     test
-  
+
     const findFlyer = await subflyerModel.findById({ _id: id })
     if (!findFlyer) {
       return res.status(400).send({ status: false, message: "subflyer data already delete", data: null })
@@ -102,6 +134,6 @@ const deleteSubFlyer = async function (req, res) {
 }
 
 
-module.exports = { createSubFlyer, updateSubFlyer, getSubFlyer, getSubFlyerList, deleteSubFlyer }
+module.exports = { createSubFlyer, updateSubFlyer, getSubFlyerByFlyer, getSubFlyerList, deleteSubFlyer, getSubFlyerById }
 
 

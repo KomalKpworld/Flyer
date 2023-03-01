@@ -1,5 +1,5 @@
 const flyerModel = require('../Schema/flyer-model')
-
+const subflyerModel = require('../Schema/subflyer-model')
 const createFlyer = async (req, res) => {
 
   try {
@@ -72,6 +72,7 @@ const deleteFlyer = async function (req, res) {
     if (!findFlyer) {
       return res.status(400).send({ status: false, message: "flyer data already delete", data: null })
     }
+    await subflyerModel.deleteMany({flyerId: id})
     const deleteFlyer = await flyerModel.findByIdAndDelete(id)
     return res.status(200).send({ status: true, message: " flyer delete successfully", data: deleteFlyer })
   }
