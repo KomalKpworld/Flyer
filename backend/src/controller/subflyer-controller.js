@@ -1,7 +1,7 @@
 
 const subflyerModel = require('../Schema/subflyer-model')
 const flyers = require('../Schema/flyer-model')
-
+const { setPagination } = require('../helper/commonFunction')
 //* Create SubFlyer *//////
 const createSubFlyer = async (req, res) => {
 
@@ -57,7 +57,7 @@ const updateSubFlyer = async function (req, res) {
 }
 
 //* get   getSubFlyerByFlyer  by Flyer id   *///////////////////////////////////
-const  getSubFlyerByFlyer = async function (req, res) {
+const getSubFlyerByFlyer = async function (req, res) {
   try {
     let id = req.params.flyerId
 
@@ -78,8 +78,8 @@ const getSubFlyerById = async function (req, res) {
   try {
     let id = req.params.id
     console.log(id)
-    let flyerData = await subflyerModel.findOne({_id:id})
-console.log(flyerData)
+    let flyerData = await subflyerModel.findOne({ _id: id })
+    console.log(flyerData)
     if (!flyerData) {
       return res.status(400).send({ status: false, message: "please check id , record is deleted or wrong id", data: null })
     }
@@ -94,20 +94,20 @@ console.log(flyerData)
 const getSubFlyerList = async function (req, res) {
   try {
 
-    // let flyerData = await flyers.aggregate([
-    //   {
-    //     $lookup: {
-    //       from: "subflyers",
-    //       localField: "_id",
-    //       foreignField: "flyerId",
-    //       as: "subflyer",
-    //     },
-
-    //   },
-    // ])
-
-    let getFlyerById = await subflyerModel.find()
-    return res.status(200).send({ status: true, message: "get subflyer list  ", data: getFlyerById })
+    if (req.query.search) {
+      
+      var where = {
+        $or: [{ image_url: { $regex: ".*" + req.query.search + ".*", $options: 'i' } },
+        { text: { $regex: ".*" + req.query.search + ".*", $options: 'i' } }]
+      }
+    }
+    const pagination = await setPagination(req.query);
+    let getSubFlyerList = await subflyerModel.find(where).sort(pagination.sort)
+      .skip(pagination.offset)
+      .limit(pagination.limit)
+     
+let count = await subflyerModel.find().count()
+    return res.status(200).send({ status: true, message: "get subflyer list  ", data: getSubFlyerList, count: count })
   }
   catch (err) {
     res.status(500).send({ status: false, message: err.message })
@@ -119,12 +119,7 @@ const getSubFlyerList = async function (req, res) {
 const deleteSubFlyer = async function (req, res) {
   try {
     let id = req.params.id
-    test
-
-    const findFlyer = await subflyerModel.findById({ _id: id })
-    if (!findFlyer) {
-      return res.status(400).send({ status: false, message: "subflyer data already delete", data: null })
-    }
+   
     const deleteSabFlyer = await subflyerModel.findByIdAndDelete(id)
     return res.status(200).send({ status: true, message: " subflyer delete successfully", data: deleteSabFlyer })
   }
@@ -132,7 +127,6 @@ const deleteSubFlyer = async function (req, res) {
     res.status(500).send({ status: false, message: err.message })
   }
 }
-
 
 module.exports = { createSubFlyer, updateSubFlyer, getSubFlyerByFlyer, getSubFlyerList, deleteSubFlyer, getSubFlyerById }
 

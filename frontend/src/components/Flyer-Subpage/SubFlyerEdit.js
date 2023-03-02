@@ -45,6 +45,8 @@ const SubFlyerEdit = () => {
     const getFlyer = () => {
         axios.get('http://localhost:3001/get-subflyer/' + subflyerId).then((result) => {
             let data = result.data.data
+            Setimage_url(data?.image_url);
+            console.log(data)
             SetPost(result.data.data);
             Setrotation(data.rotation);
             Setscale(data.scale);
@@ -55,18 +57,18 @@ const SubFlyerEdit = () => {
             Setheight(data.height);
             Setwidth(data.width);
             Setorder_by(data.order_by);
-            Setfont_name(data.font_name);
-            Setfont_size(data.font_size);
-            Setfont_color(data.font_color);
-            Setfont_align(data.font_align);
-            Setis_bold(data.is_bold);
-            Setis_underline(data.is_underline);
-            Setletter_spacing(data.letter_spacing);
-            Setfont_file(data.font_file);
-            Setfile_font(data.file_font);
+            Setfont_name(data.font.font_name);
+            Setfont_size(data.font.font_size);
+            Setfont_color(data.font.font_color);
+            Setfont_align(data.font.font_align);
+            Setis_bold(data.font.is_bold);
+            Setis_underline(data.font.is_underline);
+            Setletter_spacing(data.font.letter_spacing);
+            Setfont_file(data.font.font_file);
+            Setfile_font(data.font.file_font);
             Setfont_vertical_spacing(data.font_vertical_spacing);
             Settext(data.text);
-            Setimage_url(data.image_ur);
+           
 
 
         }).catch((error) => {
@@ -90,7 +92,7 @@ const SubFlyerEdit = () => {
     }
 
     return (
-        <div style={{ width: '80%', height: '100%', margin: 'auto', marginTop: '150px', }}>
+        <div style={{ width: '90%', height: '100%', margin: 'auto', marginTop: '150px', }}>
 
 
             <div className='mt-40 text-center bg-gray-200 space-x-8' style={{ margin: 'auto', height: '600px', }}>
@@ -166,9 +168,6 @@ const SubFlyerEdit = () => {
 
                         </div>
                     </div>
-
-                  
-
               
 
                     <div className=''>

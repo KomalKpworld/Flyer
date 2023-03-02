@@ -32,26 +32,22 @@ const Flyerpage = () => {
 
   const LoadRemove = async (id) => {
   axios.delete(`http://localhost:3001/delete-flyer/${id}`);
-
-  const newList = postData?.data?.filter((data)=>{
-    console.log(data._id)
-   return data._id !== id;
-  })
- SetPost(newList);
-
+  getFlyerList();
   }
 
-
-  useEffect(() => {
+  function getFlyerList(){
     axios.get('http://localhost:3001/get-flyer-list').then((response) => {
       SetPost(response.data);
 
     }).catch((error) => {
       return SetError(error.message)
     })
+  }
 
+  useEffect(() => {
+  getFlyerList();
   }, []);
-  console.log(postData.data)
+ 
 
 const Search = ()=>{
   console.log("jhgukh")
@@ -151,8 +147,8 @@ const Search = ()=>{
       </Table>
       <TablePagination
       component="div"
-      count={100}
-      page={page}
+      count={postData.count}
+      page={postData.offset}
       onPageChange={handleChangePage}
       rowsPerPage={rowsPerPage}
       onRowsPerPageChange={handleChangeRowsPerPage}

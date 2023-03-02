@@ -16,7 +16,7 @@ const SubFlyerDetails = () => {
 
     useEffect(() => {
         axios.get('http://localhost:3001/get-subflyer/' + subflyerId).then((response) => {
-            console.log(response)
+
             chengeSubFlyerData(response.data.data);
 
         }).catch((error) => {
@@ -24,7 +24,7 @@ const SubFlyerDetails = () => {
         })
 
     }, []);
-    console.log(subflyer)
+    console.log(subflyer.data)
     const LoadEdit = (subflyerId) => {
         navigate('/sub-flyer/edit/' + subflyerId);
     }
