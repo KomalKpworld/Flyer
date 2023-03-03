@@ -2,7 +2,7 @@ import React from 'react';
 import {
     BrowserRouter as Router, Route, Routes
 } from "react-router-dom";
-import { Navbar, Flyerpage,FlyerEdit,FlyerDetails, FlyerAdd, FlyerSubpage, SubFlyerAdd,SubFlyerEdit, SubFlyerDetails } from './index.js';
+import { Navbar, Flyerpage,FlyerEdit,FlyerDetails, FlyerAdd, FlyerSubpage, SubFlyerAdd,SubFlyerEdit, SubFlyerDetails ,UploadFIles, GetUploadFIle, FileDetails} from './index.js';
 
 const App = () => {
 
@@ -18,7 +18,10 @@ const App = () => {
          <Route path='/sub-flyer/create' element={<SubFlyerAdd/>} />
          <Route path='/sub-flyer/edit/:subflyerId' element={<SubFlyerEdit/>} />
          <Route path='/sub-flyer/details/:subflyerId' element={<SubFlyerDetails/>} />
-         
+         <Route path='/upload-files' element={<UploadFIles/>} />
+         <Route path='/get-files' element={<GetUploadFIle/>} />
+         <Route path='/get-files/:id' element={<FileDetails/>} />
+      
       </Routes>
         </div>
     )

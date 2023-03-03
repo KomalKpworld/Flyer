@@ -23,7 +23,7 @@ app.use((req, res, next) => {
     next();
   });
 
-  
+  app.use('/image', express.static('upload/parentFlyer'))
 app.use(cors());
 app.use(express.json());
 // Have Node serve the files for our built React app
