@@ -1,25 +1,23 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import axios from "axios";
-import { Button, Table } from '@mui/material'
+import { Table } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from './Pagination';
-import Search from './Search';
-
+import Search from '../helper/Search'
 
 const FlyerSubpage = () => {
   const [postData, SetPost] = useState([]);
-
   const navigate = useNavigate();
   const [error, SetError] = useState('')
-const [currentPage, setCurrentPage] = useState(1)
-const [postsPerPage, setPostPerPage] = useState(5)
-const [value, setValue] = useState('')
-const lastPostIndex = currentPage * postsPerPage;
-const fristpostIndex = lastPostIndex - postsPerPage;
-const currentPosts = postData.slice(fristpostIndex , lastPostIndex)
-const [dataSource, setDataSource] = useState(currentPosts)
-const [tableFilter , setTableFilter] = useState()
-
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage, setPostPerPage] = useState(10)
+  const [value, setValue] = useState('')
+  const lastPostIndex = currentPage * postsPerPage;
+  const fristpostIndex = lastPostIndex - postsPerPage;
+  const currentPosts = postData.slice(fristpostIndex, lastPostIndex)
+  const [dataSource, setDataSource] = useState(currentPosts)
+  const [tableFilter, setTableFilter] = useState()
+  const [flyerId , setFlyerId] = useState()
   const LoadEdit = (id) => {
     console.log(id)
     navigate('/sub-flyer/edit/' + id);
@@ -29,62 +27,46 @@ const [tableFilter , setTableFilter] = useState()
   }
   const LoadRemove = async (id) => {
     console.log(id)
-    axios.delete(`http://localhost:3001/delete-subflyer/${id}`); 
+    axios.delete(`http://localhost:3001/delete-subflyer/${id}`);
     getSubFLyer()
-
   }
   useEffect(() => {
     getSubFLyer()
   }, []);
-
-  function getSubFLyer(){
+  function getSubFLyer() {
     axios.get('http://localhost:3001/get-subflyer-list').then((response) => {
       console.log(response?.data)
-     
       SetPost(response.data.data);
-
     }).catch((error) => {
       return SetError(error.message)
     })
   }
 
-  function getflyerId (){
-  const  id = axios.get('http://localhost:3001/get-subflyer/flyer/:flyerId')
-  console.log(id)
-
+  function getflyerId() {
+    const id = axios.get('http://localhost:3001/get-subflyer/flyer/:flyerId').then((response) => {
+      console.log(response?.data)
+      SetPost(response.data.data);
+    }).catch((error) => {
+      return SetError(error.message)
+    })
   }
- console.log(dataSource)
-//  const filterData =(e) =>{
-//   if(e.target.value != ''){
-//     setValue(e.target.value)
-//     const filterTable = dataSource.filter(o => Object.keys(o).some(k=> 
-//       String(o[k]).toLowerCase().includes(e.target.value.toLowerCase())))
-//       setTableFilter([...filterTable])
-//   }else{
-//     setValue(e.target.value);
-//     setDataSource([...dataSource])
-//   }
-//  }
- 
+   
+  
+  console.log(dataSource)
   return (
-
     <div style={{ marginTop: '80px', textAlign: 'center' }} className='text-sm'>
+      <div> <Link to="/sub-flyer/create" className=' float-left ml-16 bg-blue-500 space-x-6 space-y-28 text-2xl text-white flex' style={{ marginTop: '20px', marginBottom: '30px' }} > Add New (+)  </Link></div>
+      <div>
 
-       <div> <Link to="/sub-flyer/create" className=' float-left ml-16 bg-blue-500 space-x-6 space-y-28 text-2xl text-white flex' style={{ marginTop: '20px', marginBottom: '30px' }} > Add New (+)  </Link></div>
-       <div>
-            
-            <input
-                style={{ width: "30%", height: "30px" }}
-                type='text'
-                placeholder='Search'
-                value={value}
-                onChange={getflyerId}
-            />
-        
-        </div>
-      
+        <input
+          style={{ width: "30%", height: "30px" }}
+          type='text'
+          placeholder='Search'
+          value={value}
+          onChange={getflyerId}
+        />
+      </div>
       <Table className='border-collapse border border-slate-400 ...' style={{ marginLeft: '10px', marginRight: '50px', marginTop: '10px' }}>
-
         <thead >
           <tr>
             <th className='border border-slate-400 ...'>
@@ -171,194 +153,88 @@ const [tableFilter , setTableFilter] = useState()
 
           </tr>
         </thead>
-
-        <tbody  > {currentPosts.length>0 ? currentPosts.map((data) => {
-
-                return (
-                  <tr key={data?._id}>
-                    <td className='border border-slate-400 ...'>
-                      {data?._id}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.flyerId}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.type}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.rotation}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.scale}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.is_flipped}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.is_lock}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.x}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data.y}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data.height}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data.width}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data.order_by}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.font?.font_name
-                      }
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.font?.font_size
-                      }
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.font?.font_color}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.font?.font_align
-                      }
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.font?.is_bold
-                      }
-                    </td>
-
-                    <td className='border border-slate-400 ...'>
-                      {data?.font?.is_underline
-                      }
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.font?.letter_spacing
-                      }
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.font?.font_file
-                      }
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data?.font?.file_font
-                      }
-                    </td>
-
-
-                    <td className='border border-slate-400 ...'>
-                      {data.font_vertical_spacing}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data.text}
-                    </td>
-                    <td className='border border-slate-400 ...'>
-                      {data.image_url}
-                    </td>
-                    <td className='border border-slate-400 ... mb-3'>
-                      <a onClick={() => { LoadEdit(data?._id) }} >
-                        <Link to='/flyer/edit/:flyerId' className='bg-green-500 text-white p-0.3 mb-5'>Edit </Link></a> <br />
-                      <a onClick={() => { LoadDetails(data?._id) }} >
-                        <Link className='bg-blue-500 text-white p-0.3'> Details </Link></a> <br />
-
-                      <a onClick={() => { LoadRemove(data?._id) }}>
-                        <Link className='bg-red-500 text-white p-0.3'> Remove</Link></a><br />
-                    </td>
-
-                  </tr>
-                )
-              })
-         :
-         dataSource.map((data) => {
+        <tbody  > {currentPosts.length > 0 ? currentPosts.map((data) => {
 
           return (
             <tr key={data?._id}>
               <td className='border border-slate-400 ...'>
-                {data?._id}
+                {data?._id ? data?._id : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.flyerId}
+                {data?.flyerId ? data?.flyerId : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.type}
+                {data?.type ? data?.type : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.rotation}
+                {data?.rotation ? data?.rotation : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.scale}
+                {data?.scale ? data?.scale : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.is_flipped}
+                {data?.is_flipped ? data?.is_flipped : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.is_lock}
+                {data?.is_lock ? data?.is_lock : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.x}
+                {data?.x ? data?.x : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data.y}
+                {data.y ? data.y : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data.height}
+                {data.height ? data.height : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data.width}
+                {data.width ? data.width : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data.order_by}
+                {data.order_by ? data.order_by : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.font?.font_name
+                {data?.font?.font_name ? data?.font?.font_name : 'null'}
+              </td>
+              <td className='border border-slate-400 ...'>
+                {data?.font?.font_size ? data?.font?.font_size : 'null'
                 }
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.font?.font_size
+                {data?.font?.font_color ? data?.font?.font_color : 'null'}
+              </td>
+              <td className='border border-slate-400 ...'>
+                {data?.font?.font_align ? data?.font?.font_align : 'null'
                 }
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.font?.font_color}
-              </td>
-              <td className='border border-slate-400 ...'>
-                {data?.font?.font_align
+                {data?.font?.is_bold ? data?.font?.is_bold : 'null'
                 }
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.font?.is_bold
-                }
-              </td>
-
-              <td className='border border-slate-400 ...'>
-                {data?.font?.is_underline
+                {data?.font?.is_underline ? data?.font?.is_underline : 'null'
                 }
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.font?.letter_spacing
+                {data?.font?.letter_spacing ? data?.font?.letter_spacing : 'null'
                 }
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.font?.font_file
+                {data?.font?.font_file ? data?.font?.font_file : 'null'
                 }
               </td>
               <td className='border border-slate-400 ...'>
-                {data?.font?.file_font
+                {data?.font?.file_font ? data?.font?.file_font : 'null'
                 }
               </td>
-
-
               <td className='border border-slate-400 ...'>
-                {data.font_vertical_spacing}
+                {data.font_vertical_spacing ? data.font_vertical_spacing : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data.text}
+                {data.text ? data.text : 'null'}
               </td>
               <td className='border border-slate-400 ...'>
-                {data.image_url}
+                {data.image_url ? data.image_url : 'null'}
               </td>
               <td className='border border-slate-400 ... mb-3'>
                 <a onClick={() => { LoadEdit(data?._id) }} >
@@ -373,19 +249,111 @@ const [tableFilter , setTableFilter] = useState()
             </tr>
           )
         })
-          }
+          :
+          dataSource.map((data) => {
+            return (
+              <tr key={data?._id}>
+                <td className='border border-slate-400 ...'>
+                  {data?._id ? data?._id : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.flyerId ? data?.flyerId : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.type ? data?.type : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.rotation ? data?.rotation : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.scale ? data?.scale : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.is_flipped ? data?.is_flipped : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.is_lock ? data?.is_lock : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.x ? data?.x : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data.y ? data.y : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data.height ? data.height : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data.width ? data.width : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data.order_by ? data.order_by : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.font?.font_name ? data?.font?.font_name : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.font?.font_size ? data?.font?.font_size : 'null'
+                  }
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.font?.font_color ? data?.font?.font_color : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.font?.font_align ? data?.font?.font_align : 'null'
+                  }
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.font?.is_bold ? data?.font?.is_bold : 'null'
+                  }
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.font?.is_underline ? data?.font?.is_underline : 'null'
+                  }
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.font?.letter_spacing ? data?.font?.letter_spacing : 'null'
+                  }
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.font?.font_file ? data?.font?.font_file : 'null'
+                  }
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data?.font?.file_font ? data?.font?.file_font : 'null'
+                  }
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data.font_vertical_spacing ? data.font_vertical_spacing : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data.text ? data.text : 'null'}
+                </td>
+                <td className='border border-slate-400 ...'>
+                  {data.image_url ? data.image_url : 'null'}
+                </td>
+                <td className='border border-slate-400 ... mb-3'>
+                  <a onClick={() => { LoadEdit(data?._id) }} >
+                    <Link to='/flyer/edit/:flyerId' className='bg-green-500 text-white p-0.3 mb-5'>Edit </Link></a> <br />
+                  <a onClick={() => { LoadDetails(data?._id) }} >
+                    <Link className='bg-blue-500 text-white p-0.3'> Details </Link></a> <br />
+                  <a onClick={() => { LoadRemove(data?._id) }}>
+                    <Link className='bg-red-500 text-white p-0.3'> Remove</Link></a><br />
+                </td>
+              </tr>
+            )
+          })
+        }
         </tbody>
       </Table>
       <Pagination
-      totalPosts={postData.length} 
-       postsPerPage={postsPerPage}
-       setCurrentPage= {setCurrentPage}
-       currentPage ={currentPage}
-       />
+        totalPosts={postData.length}
+        postsPerPage={postsPerPage}
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+      />
 
     </div>
-
-
   )
 }
 

@@ -34,7 +34,7 @@ const SubFlyerEdit = () => {
     const [image_url, Setimage_url] = useState("")
     const [validation, Setval] = useState(false)
     const navigate = useNavigate();
-
+  
     const [postData, SetPost] = useState([]);
     const [error, SetError] = useState('')
 
@@ -48,6 +48,7 @@ const SubFlyerEdit = () => {
             Setimage_url(data?.image_url);
             console.log(data)
             SetPost(result.data.data);
+        
             Setrotation(data.rotation);
             Setscale(data.scale);
             Setis_flipped(data.is_flipped);
@@ -103,6 +104,7 @@ const SubFlyerEdit = () => {
                 <form onSubmit={handleSubmit} className='text-center' >
                     <div className='col-lg-12  pt-7 pb-7'>
                         <div className='form-group'>
+                     
                             <label className='mt-5 ml-6'>   rotation:    </label>
                             <input value={rotation} onChange={e => Setrotation(e.target.value)} type="text" name="name" className='outline  ml-3 ' />
                             <label className='mt-5 ml-6'>   scale:  </label>

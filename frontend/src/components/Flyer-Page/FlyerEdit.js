@@ -17,6 +17,7 @@ const FlyerEdit = () => {
     const [mode, Setmode] = useState(0)
     const [is_pro, Setis_pro] = useState(false)
     const [validation, Setval] = useState(false)
+    const [flyer_Id , SetFlyerId] = useState('')
     const navigate = useNavigate();
 
     const [postData, SetPost] = useState([]);
@@ -71,6 +72,9 @@ const FlyerEdit = () => {
 
                     <div className='col-lg-12  pt-7 pb-7'>
                         <div className='form-group'>
+                  
+                            
+
                             <label className='' >
                                 image_url:
                             </label>

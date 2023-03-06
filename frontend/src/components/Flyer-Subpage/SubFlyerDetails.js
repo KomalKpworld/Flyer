@@ -24,7 +24,7 @@ const SubFlyerDetails = () => {
         })
 
     }, []);
-    console.log(subflyer.data)
+  
     const LoadEdit = (subflyerId) => {
         navigate('/sub-flyer/edit/' + subflyerId);
     }

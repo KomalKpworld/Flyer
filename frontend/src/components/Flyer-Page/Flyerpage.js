@@ -1,43 +1,39 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from "axios";
-import { Button, Table } from '@mui/material'
+import { Table } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom';
-import TablePagination from '@mui/material/TablePagination';
 import SearchIcon from '@mui/icons-material/Search';
-import Search from '@mui/icons-material/Search';
+import Pagination from '../Flyer-Subpage/Pagination';
+import { color } from '@mui/system';
 
 const Flyerpage = () => {
   const [postData, SetPost] = useState([]);
   const [error, SetError] = useState('')
   const navigate = useNavigate();
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage, setPostPerPage] = useState(10)
+  const [value, setValue] = useState('')
+  const lastPostIndex = currentPage * postsPerPage;
+  const fristpostIndex = lastPostIndex - postsPerPage;
+  const currentPosts = postData.slice(fristpostIndex, lastPostIndex)
+  const [dataSource, setDataSource] = useState(currentPosts)
+ const [image_url , Setimage_url] = useState('')
+ const [color , SetColor] = useState('')
+
   const LoadDetails = (id) => {
     navigate('/flyer/details/' + id);
   }
-
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.postData?.data, 10));
-    setPage(0);
-  };
-
   const LoadEdit = (id) => {
     navigate('/flyer/edit/' + id);
   }
-
   const LoadRemove = async (id) => {
-  axios.delete(`http://localhost:3001/delete-flyer/${id}`);
-  getFlyerList();
+    axios.delete(`http://localhost:3001/delete-flyer/${id}`);
+    getFlyerList();
   }
-
-  function getFlyerList(){
-    axios.get('http://localhost:3001/get-flyer-list').then((response) => {
-      SetPost(response.data);
+  function getFlyerList() {
+    axios.get('http://localhost:3001/get-flyer-list?search?').then((response) => {
+      console.log(response)
+      SetPost(response.data.data);
 
     }).catch((error) => {
       return SetError(error.message)
@@ -45,24 +41,26 @@ const Flyerpage = () => {
   }
 
   useEffect(() => {
-  getFlyerList();
+    getFlyerList();
   }, []);
- 
 
-const Search = ()=>{
-  console.log("jhgukh")
-}
   return (
 
     <div style={{ marginTop: '80px', textAlign: 'center' }} className='text-sm'>
 
       <Link to="flyer/create" className=' float-left ml-16 bg-blue-500 space-x-6 space-y-28 text-2xl text-white' style={{ marginTop: '20px', marginBottom: '30px' }} > Add New (+)</Link>
-      <div className='border-2 w-52 h-9 text-center flex' style={{margin:'auto'}}>
-      <input value='' onChange={()=>{}} type="search" placeholder='search for data' name="name"  /> 
-      <span className='mt-2 ml-2.5 '>    <SearchIcon/> </span>
-      </div>
-     
-
+      
+      <label htmlFor="search-form">
+        <input
+          type="search"
+          name="search-form"
+          id="search-form"
+          className="search-input"
+          placeholder="Search for..."
+           onChange={(e) =>  (Setimage_url(e.target.value) || SetColor(e.target.value))}
+        />
+        <span className="sr-only">Search countries here</span>
+      </label>
 
       <Table className='border-collapse border border-slate-400 ...' style={{ marginLeft: '10px', marginRight: '50px', marginTop: '10px' }}>
 
@@ -101,61 +99,103 @@ const Search = ()=>{
 
         <tbody >
           {
-            postData?.data && postData?.data?.length > 0 ?
-              postData?.data?.map((data) => {
+            currentPosts?.length > 0 ? currentPosts.filter((value) => {
+              console.log(value.color)
+              if (((image_url === '' ) || (color ==='')))  {
+                return value;
+              } else if ( (value.image_url.toLowerCase().includes(image_url.toLowerCase())) || (value.color.toLowerCase().includes(color.toLowerCase()))) {
+                return value;
+              }
+            })
+            .map((data) => {
+
+              return (
+                <tr key={data?._id}>
+                  <td className='border border-slate-400 ...'>
+                    {data?._id ? data?._id : 'null'}
+                  </td>
+                  <td className='border border-slate-400 ...'>
+                    {data?.image_url ? data?.image_url : 'null'}
+                  </td>
+                  <td className='border border-slate-400 ...'>
+                    {data?.background_image_url ? data?.background_image_url : 'null'}
+                  </td>
+                  <td className='border border-slate-400 ...'>
+                    {data?.poster_height ? data?.poster_height : 'null'}
+                  </td>
+                  <td className='border border-slate-400 ...'>
+                    {data?.poster_width ? data?.poster_width : 'null'}
+                  </td>
+                  <td className='border border-slate-400 ...'>
+                    {data?.color ? data?.color : 'null'}
+                  </td>
+                  <td className='border border-slate-400 ...'>
+                    {data?.mode ? data?.mode : 'null'}
+                  </td>
+                  <td className='border border-slate-400 ...'>
+                    {data?.is_pro ? data?.mode : 'false'}
+                  </td>
+                  <td className='border border-slate-400 ... mb-3'>
+                    <a onClick={() => { LoadEdit(data?._id) }} >
+                      <Link to='/flyer/edit/:flyerId' className='bg-green-500 text-white p-0.3 mb-5'>Edit </Link></a> <br />
+                    <a onClick={() => { LoadDetails(data?._id) }} >
+                      <Link className='bg-blue-500 text-white p-0.3'> Details </Link></a> <br />
+
+                    <a onClick={() => { LoadRemove(data?._id) }}>
+                      <Link className='bg-red-500 text-white p-0.3'> Remove</Link></a><br />
+                  </td>
+
+                </tr>
+              )
+            }) :
+              dataSource.map((data) => {
                 return (
                   <tr key={data?._id}>
                     <td className='border border-slate-400 ...'>
-                      {data?._id}
+                      {data?._id ? data?._id : 'null'}
                     </td>
                     <td className='border border-slate-400 ...'>
-                      {data?.image_url}
+                      {data?.image_url ? data?.image_url : 'null'}
                     </td>
                     <td className='border border-slate-400 ...'>
-                      {data?.background_image_url}
+                      {data?.background_image_url ? data?.background_image_url : 'null'}
                     </td>
                     <td className='border border-slate-400 ...'>
-                      {data?.poster_height}
+                      {data?.poster_height ? data?.poster_height : 'null'}
                     </td>
                     <td className='border border-slate-400 ...'>
-                      {data?.poster_width}
+                      {data?.poster_width ? data?.poster_width : 'null'}
                     </td>
                     <td className='border border-slate-400 ...'>
-                      {data?.color}
+                      {data?.color ? data?.color : 'null'}
                     </td>
                     <td className='border border-slate-400 ...'>
-                      {data?.mode}
+                      {data?.mode ? data?.mode : 'null'}
                     </td>
                     <td className='border border-slate-400 ...'>
-                      {data.is_pro}
+                      {data?.is_pro ? data?.mode : 'false'}
                     </td>
                     <td className='border border-slate-400 ... mb-3'>
                       <a onClick={() => { LoadEdit(data?._id) }} >
-                        <Link to='/flyer/edit/:flyerId' className='bg-green-500 text-white p-0.3 mb-5'>Edit </Link></a> <br /> 
+                        <Link to='/flyer/edit/:flyerId' className='bg-green-500 text-white p-0.3 mb-5'>Edit </Link></a> <br />
                       <a onClick={() => { LoadDetails(data?._id) }} >
-                        <Link className='bg-blue-500 text-white p-0.3'> Details </Link></a> <br /> 
-
-                        <a onClick={() => { LoadRemove(data?._id) }}>
-                        <Link className='bg-red-500 text-white p-0.3'> Remove</Link></a><br /> 
+                        <Link className='bg-blue-500 text-white p-0.3'> Details </Link></a> <br />
+                      <a onClick={() => { LoadRemove(data?._id) }}>
+                        <Link className='bg-red-500 text-white p-0.3'> Remove</Link></a><br />
                     </td>
-
                   </tr>
                 )
-              }) : " No Data Available"
+              })
           }
         </tbody>
       </Table>
-      <TablePagination
-      component="div"
-      count={postData.count}
-      page={postData.offset}
-      onPageChange={handleChangePage}
-      rowsPerPage={rowsPerPage}
-      onRowsPerPageChange={handleChangeRowsPerPage}
-    />
+      <Pagination
+        totalPosts={postData.length}
+        postsPerPage={postsPerPage}
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+      />
     </div>
-
-    
   )
 }
 
