@@ -1,33 +1,37 @@
-import React, { useEffect, useState } from 'react'
-import axios
-    from 'axios'
+import React, { useState, useEffect } from 'react'
+
+import axios from "axios";
 
 const Search = () => {
-    const [loading, setLoading] = useState(false);
-    const [posts, setPosts] = useState([]);
-    const [searchType, setSearchType] = useState('');
-    useEffect(() => {
-        const loadPosts = async () => {
-            setLoading(true);
-            const response = await
-                axios.get('http://localhost:3001/get-subflyer/flyer/:flyerId');
-            setPosts(response.data.data);
-            setLoading(false);
+    const [postData, SetPost] = useState([]);
+    const [error, SetError] = useState('')
+   const [select, setSelect] = useState();
 
-        };
-        loadPosts();
+    useEffect(() => {
+        getSubFLyer()
     }, []);
-    console.log(posts, "uiu")
+    function getSubFLyer() {
+        axios.get('http://localhost:3001/get-flyer-list').then((response) => {
+            SetPost(response.data.data);
+        }).catch((error) => {
+            return SetError(error.message)
+        })
+    } console.log(select)
+   
+    console.log(postData)
     return (
         <div>
-            
-            <input
-                style={{ width: "30%", height: "30px" }}
-                type='text'
-                placeholder='Search'
-                onChange={(e) => setSearchType(e.target.value)}
-            />
-        
+             <select value={select} onChange ={e=>setSelect(e.target.value)} >
+             <option>choose</option>  
+             {
+                postData.length > 0 ? postData.map((data) => {
+                    return (
+                            <option key={data._id}> {data._id}</option>
+                    )
+                })
+                 : 'null'
+            }
+            </select>
         </div>
     )
 }

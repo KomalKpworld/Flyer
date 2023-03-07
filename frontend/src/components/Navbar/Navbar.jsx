@@ -45,21 +45,17 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
-
 const Navbar = () => {
   const theme = useTheme();
   const [open, SetOpen] = React.useState(false);
-
   const handleDrawerOpen = () => {
     SetOpen(true);
   };
-
   const handleDrawerClose = () => {
     SetOpen(false);
   };
-
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }} >
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -73,9 +69,8 @@ const Navbar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" >
-            Fleyer List
-          </Typography>
 
+          </Typography>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -90,14 +85,15 @@ const Navbar = () => {
         variant="persistent"
         anchor="left"
         open={open}
+        className='text-white' style={{ background: 'black' }}
       >
-        <DrawerHeader>
+        <DrawerHeader className='bg-blue-500 '>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
+        <List className='text-white  bg-blue-500 h-screen'>
           <ListItem >
             <ListItemButton>
               <Link to='/'>
@@ -110,7 +106,6 @@ const Navbar = () => {
               <Link to='/sub-flyer'>
                 SubFlyers
               </Link>
-
             </ListItemButton>
           </ListItem>
           <ListItem >
@@ -118,10 +113,8 @@ const Navbar = () => {
               <Link to='/get-files'>
                 File upload
               </Link>
-
             </ListItemButton>
           </ListItem>
-
         </List>
         <Divider />
       </Drawer>

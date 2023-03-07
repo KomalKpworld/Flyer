@@ -1,8 +1,8 @@
 import React from 'react';
 import "./styles.css";
-const Pagination = ({totalPosts, postsPerPage,setCurrentPage, currentPage}) => {
+const Pagination = ({ totalPosts, postsPerPage, setCurrentPage, currentPage }) => {
     let pages = [];
-    for(let i= 1; i<= Math.ceil(totalPosts/postsPerPage); i++){
+    for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
         pages.push(i)
     }
     return (
@@ -13,9 +13,9 @@ const Pagination = ({totalPosts, postsPerPage,setCurrentPage, currentPage}) => {
                     {page}
                 </button>
             })}
-           
+
         </div>
-        
+
     )
 }
 
