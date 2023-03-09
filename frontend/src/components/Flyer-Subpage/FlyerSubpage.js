@@ -171,14 +171,16 @@ const FlyerSubpage = () => {
             </th>
           </tr>
         </thead>
-        <tbody> {currentPosts.length > 0 ? postData?.filter((value) => {
-          console.log(value)
-          if (select === 'choose') {
-            return value
-          }
-          else if (select === value.flyerId) {
-            return value
-          }       
+        <tbody> {currentPosts.length > 0 ? 
+
+        currentPosts.filter((value) => {
+
+  if ((flyerId === '') || (type === '') || (select =='choose') ) {
+    return value;
+  } else if ( ( type === '' || (value.type === type)) && (select == value.flyerId) ) {
+    return value;
+  }
+            
         }).map((data) => {
           return (
             <tr key={data?._id}>
