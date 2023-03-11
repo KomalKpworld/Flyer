@@ -52,6 +52,7 @@ const FlyerSubpage = () => {
       return SetError(error.message)
     })
   }
+  console.log(select)
   return (
     <div style={{ marginTop: '80px', textAlign: 'center' }} className='text-sm'>
       <div>
@@ -76,20 +77,7 @@ const FlyerSubpage = () => {
         </select>
       </div>
       <div>
-        <label htmlFor="search-form">
-          <TextField
-            type="search"
-            onChange={(e) => ((setFlyerId(e.target.value) || setType(e.target.value)) )}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <SearchIcon />
-                </InputAdornment>
-              )
-            }}
-          />
-          <span className="sr-only">Search countries here</span>
-        </label>
+        
       </div>
       <Table className='border-collapse border border-slate-400 ...' style={{ marginLeft: '10px', marginRight: '50px', marginTop: '10px' }}>
         <thead >
@@ -173,14 +161,14 @@ const FlyerSubpage = () => {
         </thead>
         <tbody> {currentPosts.length > 0 ? 
 
-        currentPosts.filter((value) => {
+currentPosts.filter((value) => {
 
-  if ((flyerId === '') || (type === '') || (select =='choose') ) {
-    return value;
-  } else if ( ( type === '' || (value.type === type)) && (select == value.flyerId) ) {
+  if ( (select =='choose') ) {
     return value;
   }
-            
+  else if((select === value.flyerId)){ 
+   return value
+  }     
         }).map((data) => {
           return (
             <tr key={data?._id}>

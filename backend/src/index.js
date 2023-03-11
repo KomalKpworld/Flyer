@@ -35,15 +35,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload({
     useTempFiles: true
 }))
+mongoose.set("strictQuery", false);
 mongoose.connect(process.env.db, { useNewUrlParser: true })
     .then(() => console.log('MongoDb Connected'))
     .catch(err => console.log(err))
 
 
-mongoose.set("debug", (collectionName, method, query, doc) => {
+// mongoose.set("debug", (collectionName, method, query, doc) => {
 
-    console.log(`${collectionName}.${method}`, JSON.stringify(query), doc);
-});
+//     console.log(`${collectionName}.${method}`, JSON.stringify(query), doc);
+// });
 
 
 app.use('/', flyerRoute);

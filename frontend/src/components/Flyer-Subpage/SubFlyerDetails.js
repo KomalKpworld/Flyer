@@ -24,7 +24,7 @@ const SubFlyerDetails = () => {
         })
 
     }, []);
-  
+
     const LoadEdit = (subflyerId) => {
         navigate('/sub-flyer/edit/' + subflyerId);
     }
@@ -65,12 +65,14 @@ const SubFlyerDetails = () => {
                 Font is bold or not : <b>{subflyer?.font?.is_bold ? subflyer?.font?.is_bold : 'null'} </b></h1>
             <h1 > Font is underline : <b>{subflyer?.font?.is_underline ? subflyer?.font?.is_underline : 'null'} </b>,
                 Font letter_spacing : <b>{subflyer?.font?.letter_spacing ? subflyer?.font?.letter_spacing : 'null'} </b></h1>
-            <h1 > Font file is  : <b>{subflyer?.font?.font_file ? subflyer?.font?.font_file : 'null'} </b>,
-                File font is  : <b>{subflyer?.font?.file_font ? subflyer?.font?.file_font : 'null'} </b></h1>
+            <h1> Font file is  :
+            <b>{subflyer?.font?.font_file ? subflyer?.font?.font_file : ' null'} </b>,</h1>
+           
+            <a href={subflyer?.font?.file_font}>   File font is  : <b>{subflyer?.font?.file_font ? subflyer?.font?.file_font : 'null'} </b> </a>
 
             <h1 > Font font_vertical_spacing : <b>{subflyer?.font_vertical_spacing ? subflyer?.font_vertical_spacing : 'null'} </b></h1>
             <h1 > Text: <b>{subflyer?.text ? subflyer?.text : 'null'} </b></h1>
-            <h1 style={{ marginBottom: '20px' }} > Image Url: <b>{subflyer?.image_url ? subflyer?.image_url : 'null'} </b></h1>
+            <a href={subflyer?.image_url} style={{ marginBottom: '30px' }} > Image Url: <b>{subflyer?.image_url ? subflyer?.image_url : 'null'} </b></a> <br/>
 
             <a className='space-y-5 mr-3 text-center bg-green-700 shadow-md rounded-full p-1 ' onClick={() => { LoadEdit(subflyer?._id) }}  >
                 <Link style={{ marginTop: '20px' }} > Edit  </Link> </a>

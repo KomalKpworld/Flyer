@@ -77,9 +77,9 @@ const getSubFlyerByFlyer = async function (req, res) {
 const getSubFlyerById = async function (req, res) {
   try {
     let id = req.params.id
-    console.log(id)
+  
     let flyerData = await subflyerModel.findOne({ _id: id })
-    console.log(flyerData)
+
     if (!flyerData) {
       return res.status(400).send({ status: false, message: "please check id , record is deleted or wrong id", data: null })
     }
@@ -102,6 +102,7 @@ const getSubFlyerList = async function (req, res) {
       }
     }
     const pagination = await setPagination(req.query);
+ 
     let getSubFlyerList = await subflyerModel.find(where).sort(pagination.sort)
       .skip(pagination.offset)
       .limit(pagination.limit)

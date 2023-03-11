@@ -1,5 +1,6 @@
 const cloudinary = require('cloudinary').v2;
 const uploadFile = require('../Schema/upload-file-model')
+const fs = require('node:fs/promises');
 
 cloudinary.config({
   cloud_name: process.env.cloud_name,
@@ -23,7 +24,7 @@ const uploadParentImage = async (req, res) => {
     let obj = {
       id: imageData.asset_id,
       path: imageData.folder,
-      file_name: imageData.original_filename,
+      file_name: file.name,
       url: imageData.url,
       publicId: imageData.public_id
     }
@@ -48,7 +49,7 @@ const uploadBackgroundImage = async (req, res) => {
     let obj = {
       id: imageData.asset_id,
       path: imageData.folder,
-      file_name: imageData.original_filename,
+      file_name: file.name,
       url: imageData.url,
       publicId: imageData.public_id
     }
@@ -59,28 +60,49 @@ const uploadBackgroundImage = async (req, res) => {
 const uploadSubflyerImage = async (req, res) => {
   let file = req.files.image
   if (file) {
-    let imageData = await cloudinary.uploader.upload(
-      file.tempFilePath, { folder: "uploads/flyer/thumbnails" },
-      async (error, result) => {
-        console.log(error)
-        console.log(result);
-        return (result)
+console.log(file.name)
+   var imageData= await  cloudinary.uploader
+      .upload(file.tempFilePath,
+      
+        {
+      format:false,
+          public_id: file.name,
+         folder: "uploads/flyer/thumbnails",
+        use_filename: true
+      
+        } ,
+        async (error, result) => {
+          console.log(error)
+          console.log(result);
+          return (result)
+        }
+        ) 
+      
+    
+    // let imageData = await cloudinary.uploader.upload(
+    //   file.tempFilePath, (use_filename => true), { folder: "uploads/flyer/thumbnails" },
+
+      // async (error, result) => {
+      //   console.log(error)
+      //   console.log(result);
+      //   return (result)
+      // }
+    // );
       }
-    );
-    console.log(imageData)
-    let obj = {
-      id: imageData.asset_id,
-      path: imageData.folder,
-      file_name: imageData.original_filename,
-      url: imageData.url,
-      publicId: imageData.public_id
-    }
-    let createBackgroundImageUpload = await uploadFile.create(obj)
-    return res.status(201).send({ status: true, data: createBackgroundImageUpload })
+    // let obj = {
+
+    //   path: imageData.folder,
+    //   file_name: file.name,
+    //   url: imageData.url,
+    //   publicId: imageData.public_id
+    // }
+    // let createBackgroundImageUpload = await uploadFile.create(obj)
+    return res.status(201).send({ status: true})
   }
-}
+
 const uploadFont = async (req, res) => {
   let file = req.files.image
+  console.log(file)
   if (file) {
     let imageData = await cloudinary.uploader.upload(
       file.tempFilePath, { folder: "uploads/font" },
@@ -94,7 +116,7 @@ const uploadFont = async (req, res) => {
     let obj = {
       id: imageData.asset_id,
       path: imageData.folder,
-      file_name: imageData.original_filename,
+      file_name: file.name,
       url: imageData.url,
       publicId: imageData.public_id
     }
@@ -104,10 +126,10 @@ const uploadFont = async (req, res) => {
 }
 
 
-const getFiles = async(req, res)=>{
+const getFiles = async (req, res) => {
   let id = req.params.id
-  const findData = await uploadFile.findById({_id: id})
-  return res.status(200).send({satus: true, msg:' get file by id', data: findData})
+  const findData = await uploadFile.findById({ _id: id })
+  return res.status(200).send({ satus: true, msg: ' get file by id', data: findData })
 }
 
 const getFIleDetails = async (req, res) => {

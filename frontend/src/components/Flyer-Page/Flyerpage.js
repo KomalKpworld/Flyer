@@ -3,7 +3,8 @@ import axios from "axios";
 import { Table } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../Flyer-Subpage/Pagination';
-
+import { Search as SearchIcon } from '@mui/icons-material';
+import { TextField, InputAdornment } from '@mui/material';
 const Flyerpage = () => {
   const [postData, SetPost] = useState([]);
   const [error, SetError] = useState('')
@@ -46,17 +47,23 @@ const Flyerpage = () => {
 
     <div style={{ marginTop: '80px', textAlign: 'center' }} className='text-sm'>
       <Link to="flyer/create" className=' float-left ml-16 bg-blue-500 space-x-6 space-y-28 text-2xl text-white' style={{ marginTop: '20px', marginBottom: '30px' }} > Add New (+)</Link>
+     
       <label htmlFor="search-form">
-        <input
-          type="search"
-          name="search-form"
-          id="search-form"
-          className="search-input"
-          placeholder="Search for..."
-          onChange={(e) => (Setimage_url(e.target.value) || SetColor(e.target.value))}
-        />
-        <span className="sr-only">Search countries here</span>
-      </label>
+          <TextField
+            type="search"
+            onChange={(e) => (Setimage_url(e.target.value) || SetColor(e.target.value))}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <SearchIcon />
+                </InputAdornment>
+              )
+            }}
+          />
+         
+        </label>
+      
+       
       <Table className='border-collapse border border-slate-400 ...' style={{ marginLeft: '10px', marginRight: '50px', marginTop: '10px' }}>
         <thead >
           <tr>

@@ -28,27 +28,32 @@ const SubFlyerEdit = () => {
     const [is_underline, Setis_underline] = useState("")
     const [letter_spacing, Setletter_spacing] = useState("")
     const [font_file, Setfont_file] = useState("")
-    const [file_font, Setfile_font] = useState("")
+    //const [file_font, Setfile_font] = useState("")
     const [font_vertical_spacing, Setfont_vertical_spacing] = useState("")
     const [text, Settext] = useState("")
     const [image_url, Setimage_url] = useState("")
+    const [font, setFont] =
+        useState({
+            font_name: '',
+            font_size: '',
+            font_color: '',
+            font_align: '',
+            is_bold: '',
+            is_underline: '',
+            letter_spacing: '',
+            font_file: '',
+            file_font: '',
+        })
     const [validation, Setval] = useState(false)
     const navigate = useNavigate();
-  
+
     const [postData, SetPost] = useState([]);
     const [error, SetError] = useState('')
-
-    useEffect(() => {
-        getFlyer();
-    }, []);
-
     const getFlyer = () => {
         axios.get('http://localhost:3001/get-subflyer/' + subflyerId).then((result) => {
             let data = result.data.data
             Setimage_url(data?.image_url);
-            console.log(data)
             SetPost(result.data.data);
-        
             Setrotation(data.rotation);
             Setscale(data.scale);
             Setis_flipped(data.is_flipped);
@@ -66,30 +71,37 @@ const SubFlyerEdit = () => {
             Setis_underline(data.font.is_underline);
             Setletter_spacing(data.font.letter_spacing);
             Setfont_file(data.font.font_file);
-            Setfile_font(data.font.file_font);
+           // Setfile_font(data.font.file_font);
             Setfont_vertical_spacing(data.font_vertical_spacing);
             Settext(data.text);
-           
-
+            setFont(data.font)
 
         }).catch((error) => {
             return SetError(error.message)
         })
 
     }
+    useEffect(() => {
+        getFlyer();
+
+    }, []);
+
+    console.log(font)
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = { rotation, scale, is_flipped, is_lock, x, y, height,width,order_by, font_name,font_size,font_color, font_align,
-            is_bold,is_underline, letter_spacing,font_file,file_font,font_vertical_spacing, text, image_url  }
+        const data = {
+            rotation, scale, is_flipped, is_lock, x, y, height, width, order_by, font_name, font_size, font_color, font_align,
+            is_bold, is_underline, letter_spacing, font_file,  font_vertical_spacing, text, image_url
+        }
 
         await axios.put(`http://localhost:3001/update-subflyer/${subflyerId}`, data).then((response) => {
-            console.log(response)
+
             SetPost(response.data);
             navigate('/sub-flyer')
         }).catch((error) => {
             return SetError(error.message)
         })
-        console.log(postData.data)
+
     }
 
     return (
@@ -104,7 +116,7 @@ const SubFlyerEdit = () => {
                 <form onSubmit={handleSubmit} className='text-center' >
                     <div className='col-lg-12  pt-7 pb-7'>
                         <div className='form-group'>
-                     
+
                             <label className='mt-5 ml-6'>   rotation:    </label>
                             <input value={rotation} onChange={e => Setrotation(e.target.value)} type="text" name="name" className='outline  ml-3 ' />
                             <label className='mt-5 ml-6'>   scale:  </label>
@@ -124,53 +136,54 @@ const SubFlyerEdit = () => {
                             <input value={y} onChange={e => Sety(e.target.value)} type="text" name="name" className='outline  ml-3' />
                             <label className='mt-5 ml-6' > height:   </label>
                             <input value={height} onChange={e => Setheight(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                            <label  className='mt-5 ml-6'>  width: </label> 
+                            <label className='mt-5 ml-6'>  width: </label>
                             <input value={width} onChange={e => Setwidth(e.target.value)} type="text" name="name" className='outline  ml-3' />
                             <label className='mt-5 ml-6' >  order_by: </label>
                             <input value={order_by} onChange={e => Setorder_by(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                        
-                        
+
+
                         </div>
                     </div>
 
                     <div className='col-lg-12 pt-7 pb-7'>
                         <div className='form-group mt-6 '>
-                            <label className='mt-5 ml-6' >  font_name:        </label>                           
+                            <label className='mt-5 ml-6' >  font_name:        </label>
                             <input value={font_name} onChange={e => Setfont_name(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                            <label>  font_size: </label>                           
+                            <label>  font_size: </label>
                             <input value={font_size} onChange={e => Setfont_size(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                            <label className='mt-5 ml-6' >     font_color: </label>                        
+                            <label className='mt-5 ml-6' >     font_color: </label>
                             <input value={font_color} onChange={e => Setfont_color(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                            <label className='mt-5 ml-6' >     font_align:        </label>                          
+                            <label className='mt-5 ml-6' >     font_align:        </label>
                             <input value={font_align} onChange={e => Setfont_align(e.target.value)} type="text" name="name" className='outline  ml-3' />
                         </div>
                     </div>
                     <div className='col-lg-12 mt-6 pt-7 pb-7'>
                         <div className='form-group '>
-                            <label>   is_bold: </label>                       
+                            <label>   is_bold: </label>
                             <input value={is_bold} onChange={e => Setis_bold(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                            <label className='mt-5 ml-6' >  is_underline: </label>                      
+                            <label className='mt-5 ml-6' >  is_underline: </label>
                             <input value={is_underline} onChange={e => Setis_underline(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                            <label className='mt-5 ml-6' >  letter_spacing:        </label>                         
+                            <label className='mt-5 ml-6' >  letter_spacing:        </label>
                             <input value={letter_spacing} onChange={e => Setletter_spacing(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                            <label>    font_file: </label>                       
+                            <label>    font_file: </label>
                             <input value={font_file} onChange={e => Setfont_file(e.target.value)} type="text" name="name" className='outline  ml-3' />
+
                         </div>
                     </div>
                     <div className='col-lg-12 mt-6 pt-7 pb-7'>
                         <div className='form-group '>
-                            <label className='mt-5 ml-6' >       file_font: </label>                       
-                            <input value={file_font} onChange={e => Setfile_font(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                            <label className='mt-5 ml-6' > font_vertical_spacing:        </label>                        
+                            <label className='mt-5 ml-6' >       file_font: </label>
+                            <input type='text' value={font.file_font} onChange={e=> setFont({...font , file_font: e.target.value})}  name="name" className='outline  ml-3' />
+                            <label className='mt-5 ml-6' > font_vertical_spacing:        </label>
                             <input value={font_vertical_spacing} onChange={e => Setfont_vertical_spacing(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                            <label>  text: </label>                    
+                            <label>  text: </label>
                             <input value={text} onChange={e => Settext(e.target.value)} type="text" name="name" className='outline  ml-3' />
-                            <label className='mt-5 ml-6' >  image_url: </label>                         
+                            <label className='mt-5 ml-6' >  image_url: </label>
                             <input value={image_url} onChange={e => Setimage_url(e.target.value)} type="text" name="name" className='outline  ml-3' />
 
                         </div>
                     </div>
-              
+
 
                     <div className=''>
                         <div className='form-group '>
